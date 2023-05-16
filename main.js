@@ -13,7 +13,7 @@ const createButtonDelete = (keyProduct) => {
   button.classList.add("btn", "btn-danger");
   button.setAttribute("type", "button");
   button.setAttribute("type", "submit");
-  button.setAttribute("onclick", `deleteProducts("${keyProduct}")`)
+  button.setAttribute("onclick", `deleteProducts("${keyProduct}")`);
   buttonDelete.appendChild(button);
   return buttonDelete;
 };
@@ -53,6 +53,10 @@ const createTableRow = (key, product) => {
 const printRowOntable = (key, product) => {
   let table = document.getElementById("productsTable");
   let newRow = createTableRow(key, product);
+  if (!product.availability) {
+  console.log(product.availability);
+    newRow.classList.add("table-secondary");
+  }
   table.appendChild(newRow);
   return;
 };
@@ -75,36 +79,36 @@ const getProductInformation = () => {
   return product;
 };
 
-const addProdutButton = async() => {
+const addProdutButton = async () => {
   event.preventDefault();
   deleteListProcducts();
-let newProduct = getProductInformation();
-let pushToBD = await fetch(
-  `https://products-db-e6ed7-default-rtdb.firebaseio.com/products/.json`,
-  {
-    method: "POST",
-    body: JSON.stringify(newProduct),
-  }
-);
-let data = await pushToBD.json();
-printProducts();
-deleteInfoInputs()
-return data;
-}
+  let newProduct = getProductInformation();
+  let pushToBD = await fetch(
+    `https://products-db-e6ed7-default-rtdb.firebaseio.com/products/.json`,
+    {
+      method: "POST",
+      body: JSON.stringify(newProduct),
+    }
+  );
+  let data = await pushToBD.json();
+  printProducts();
+  deleteInfoInputs();
+  return data;
+};
 
-let printProducts = async () =>{
+let printProducts = async () => {
   let products = await getProducts();
-  for (key in products){
-    printRowOntable(key,products[key]);
+  for (key in products) {
+    printRowOntable(key, products[key]);
   }
-}
+};
 let deleteListProcducts = () => {
-  let list = document.getElementById('productsTable');
-  while(list.firstChild){
+  let list = document.getElementById("productsTable");
+  while (list.firstChild) {
     list.removeChild(list.firstChild);
-  } 
-  return id =1;
-}
+  }
+  return (id = 1);
+};
 let deleteInfoInputs = () => {
   let nameInput = document.getElementById("productName");
   nameInput.value = "";
@@ -115,23 +119,25 @@ let deleteInfoInputs = () => {
   let availabilityeCheck = document.getElementById("disabledFieldsetCheck");
   availabilityeCheck.checked = false;
   return;
-}
-const getProducts = async () =>{
-  let response = await fetch (
+};
+const getProducts = async () => {
+  let response = await fetch(
     `https://products-db-e6ed7-default-rtdb.firebaseio.com/products/.json`
   );
-  let productsObj = await response.json()
-  return productsObj
-}
+  let productsObj = await response.json();
+  return productsObj;
+};
 
 const deleteProducts = async (keyProduct) => {
-  let response = await fetch(`https://products-db-e6ed7-default-rtdb.firebaseio.com/products/${keyProduct}/.json`, {
-    method: "DELETE"
-  })
+  let response = await fetch(
+    `https://products-db-e6ed7-default-rtdb.firebaseio.com/products/${keyProduct}/.json`,
+    {
+      method: "DELETE",
+    }
+  );
   let data = await response.json();
   deleteListProcducts();
   printProducts();
   return data;
-}
+};
 printProducts();
-
