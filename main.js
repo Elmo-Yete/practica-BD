@@ -144,7 +144,7 @@ printProducts();
 
 
 
-
+// ------- Funcion para importar los datos del array original------
 // let products = [
 //   {
 //     id: 1,
