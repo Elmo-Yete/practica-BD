@@ -35,7 +35,7 @@ const createTableRow = (key, product) => {
   tableRowHead.append(rowNumber);
   let productName = createTableData(product.name);
   let productDesc = createTableData(product.description);
-  let productPrice = createTableData(product.price);
+  let productPrice = createTableData(`$ ${product.price}`);
   let deleteButton = createButtonDelete(key);
   let updateButton = createButtonUpdate();
   row.append(
